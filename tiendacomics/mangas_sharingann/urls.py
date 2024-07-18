@@ -44,7 +44,6 @@ urlpatterns = [
     path('titans', views.titans, name="titans"),
     path('tokyorevengers', views.tokyorevengers, name="tokyorevengers"),
     path('inicio_sesion_verificar/', views.inicio_sesion_verificar, name="inicio_sesion_verificar"),
-    path('comics/', views.comic_list, name='comic_list'),
     path('comic_list', views.comic_list, name='comic_list'),
     path('comics/', comic_list, name='comic_list'),
 

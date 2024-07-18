@@ -138,9 +138,7 @@ def comic_view(request, cod_comic):
 
 
 
-def comic_list(request):
-    comics = Comic.objects.all()
-    return render(request, 'mangas_sharingann/comic_list.html', {'comics': comics})
+
 
 
 def comic_list(request):

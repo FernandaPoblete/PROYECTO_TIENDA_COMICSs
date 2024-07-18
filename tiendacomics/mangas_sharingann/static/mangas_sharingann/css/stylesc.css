@@ -1,0 +1,18 @@
+/* Estilos para las tarjetas de cómics */
+.card {
+    border: 1px solid #ddd; /* Borde delgada para las tarjetas */
+}
+
+.card-img-top {
+    max-height: 200px; /* Altura máxima para las imágenes */
+    object-fit: contain; /* Ajusta la imagen dentro de su contenedor manteniendo la relación de aspecto */
+}
+
+.card-body {
+    height: 250px; /* Altura fija para el cuerpo de la tarjeta */
+    overflow-y: auto; /* Agrega scroll vertical si el contenido excede la altura */
+}
+
+.btn {
+    margin-top: 10px; /* Espacio superior para los botones */
+}
