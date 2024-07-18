@@ -1,4 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, redirect, render
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import authenticate
+from django.contrib import messages
+from .models import *
+from django.contrib.auth import authenticate, login
+from django.views import View
+from .forms import ComicForm
 
 # Create your views here.
 
@@ -104,10 +111,77 @@ def titans(request):
 def tokyorevengers(request):
     return render(request,"mangas_sharingann/tokyorevengers.html")
 
+def comic_form(request):
+    return render(request,"mangas_sharingann/comic_form.html")
 
-from django.shortcuts import render
-from .models import Comic
+def comic_list(request):
+    return render(request,"mangas_sharingann/comic_list.html")
 
-def lista_comics(request):
+def comic_list(request):
     comics = Comic.objects.all()
-    return render(request, 'tienda/lista_comics.html', {'comics': comics})
+    return render(request, 'mangas_sharingann/comic_list.html', {'comics': comics})
+
+def comic_view(request, cod_comic):
+    comic = get_object_or_404(Comic, cod_comic=cod_comic)
+
+    if request.method == 'POST':
+        form = ComicForm(request.POST, request.FILES, instance=comic)
+        if form.is_valid():
+            form.save()
+            return redirect('comic_list')
+    else:
+        form = ComicForm(instance=comic)
+
+    return render(request, 'tu_app/comic_form.html', {'form': form, 'comic': comic})
+
+
+
+
+
+def comic_list(request):
+    comics = Comic.objects.all()
+    return render(request, 'mangas_sharingann/comic_list.html', {'comics': comics})
+
+
+def comic_list(request):
+    comics = Comic.objects.all()
+    return render(request, 'mangas_sharingann/comic_list.html', {'comics': comics})
+
+def delete_comic(request, cod_comic):
+    comic = get_object_or_404(Comic, cod_comic=cod_comic)
+    if request.method == 'POST':
+        comic.delete()
+        return redirect('comic_list')
+    return render(request, 'tu_app/comic_confirm_delete.html', {'comic': comic})
+
+#*************************************************************************************
+
+
+
+def inicio_sesion_verificar(request):
+    if request.method == 'POST':
+        correo = request.POST.get('username')
+        contraseña = request.POST.get('password')
+
+        try:
+            usuario = Usuario.objects.get(correo=correo)
+        except Usuario.DoesNotExist:
+            messages.error(request, 'El correo electrónico o la contraseña son incorrectos.')
+            return render(request, 'ruta_a_tu_plantilla/login.html')
+
+        if usuario.clave == contraseña:
+            # Autenticación exitosa, procedemos a loguear al usuario
+            user = authenticate(request, username=correo, password=contraseña)
+            if user is not None:
+                login(request, user)
+                return redirect('pagina_principal')
+            else:
+                messages.error(request, 'El correo electrónico o la contraseña son incorrectos.')
+                return render(request, 'ruta_a_tu_plantilla/login.html')
+        else:
+            messages.error(request, 'El correo electrónico o la contraseña son incorrectos.')
+            return render(request, 'ruta_a_tu_plantilla/login.html')
+
+    return render(request, 'ruta_a_tu_plantilla/login.html')
+
+

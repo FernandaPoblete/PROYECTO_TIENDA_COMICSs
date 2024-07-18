@@ -1,6 +1,11 @@
 
+from django.conf import settings
 from django.urls import path
 from . import views
+from django.conf.urls.static import static
+from .views import comic_list
+from .views import comic_list, comic_view, delete_comic
+
 
 urlpatterns = [
     
@@ -38,6 +43,17 @@ urlpatterns = [
     path('thor', views.thor, name="thor"),
     path('titans', views.titans, name="titans"),
     path('tokyorevengers', views.tokyorevengers, name="tokyorevengers"),
+    path('inicio_sesion_verificar/', views.inicio_sesion_verificar, name="inicio_sesion_verificar"),
+    path('comics/', views.comic_list, name='comic_list'),
+    path('comic_list', views.comic_list, name='comic_list'),
+    path('comics/', comic_list, name='comic_list'),
+
+    path('comics/<int:cod_comic>/', comic_view, name='comic_view'),
+    path('comics/<int:cod_comic>/delete/', delete_comic, name='delete_comic'),
 
 
 ]
+
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

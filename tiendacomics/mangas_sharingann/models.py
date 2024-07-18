@@ -1,6 +1,12 @@
 from django.db import models
 
-# Create your models here.
+# Modelo para los roles de usuario
+class Rol(models.Model):
+    id_rol = models.AutoField(primary_key=True)
+    nombre_rol = models.CharField(max_length=30)
+
+    def __str__(self) -> str:
+        return self.nombre_rol
 
 # Modelo para los usuarios
 class Usuario(models.Model):
@@ -10,7 +16,8 @@ class Usuario(models.Model):
     correo = models.EmailField(max_length=50, unique=True)
     clave = models.CharField(max_length=128)  # Longitud mayor para mayor seguridad
     telefono = models.CharField(max_length=15)
-    
+    rol = models.ForeignKey(Rol, on_delete=models.CASCADE)
+
     def __str__(self) -> str:
         return f'{self.nombre} {self.apellido}'
 
@@ -37,8 +44,8 @@ class Comic(models.Model):
     cod_comic = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=30)
     precio = models.DecimalField(max_digits=10, decimal_places=2)
-    descripcion = models.CharField(max_length=400)
-    stock = models.IntegerField()  
+    descripcion = models.TextField()
+    stock = models.IntegerField()
     foto = models.ImageField(upload_to="comics")
     categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
 
